@@ -1,0 +1,3 @@
+GET 	/											learn2play.controllers.Application.index()
+GET 	/api/user/:id								learn2play.controllers.UserController.getUser(id: String)
+POST 	/api/user/									learn2play.controllers.UserController.saveUser()
