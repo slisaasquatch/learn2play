@@ -45,3 +45,35 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+/bin/
+
+# Project specific stuff
+
+/node_modules
+*.class
+
+# Package Files #
+*.war
+*.ear
+*.Demo*.java
+*.log
+
+/.cache
+/.target
+logs
+project/project
+project/target
+target
+tmp
+.history
+dist
+/.idea
+/*.iml
+/out
+/.idea_modules
+/.classpath
+/.project
+/RUNNING_PID
+/.settings
+/bin
+.DS_Store
