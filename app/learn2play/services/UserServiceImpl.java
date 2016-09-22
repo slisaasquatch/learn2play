@@ -2,26 +2,29 @@ package learn2play.services;
 
 import javax.inject.Inject;
 
-import learn2play.User;
+import org.jongo.Jongo;
+import org.jongo.MongoCollection;
+
+import learn2play.db.User;
 
 public class UserServiceImpl implements UserService {
 	
+	private MongoCollection users;
+	
 	@Inject
-	public UserServiceImpl() {
-		
+	public UserServiceImpl(Jongo jongo) {
+		users = jongo.getCollection("users");
 	}
 
 	@Override
 	public User getUser(String id) {
-		// TODO Auto-generated method stub
-		//return null;
-		return new User("123", "abc");
+		User user = users.findOne("{'_id':'" + id + "'}").as(User.class);
+		return user;
 	}
 
 	@Override
 	public void saveUser(User user) {
-		// TODO Auto-generated method stub
-		
+		users.save(user);
 	}
 
 }

@@ -3,12 +3,11 @@ package learn2play.controllers;
 import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.Gson;
 
-import learn2play.User;
+import learn2play.db.User;
 import learn2play.services.UserService;
 import play.cache.CacheApi;
-import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
 
@@ -16,11 +15,13 @@ public class UserController extends Controller {
 	
 	private CacheApi cache;
 	private UserService userService;
+	private Gson gson;
 	
 	@Inject
-	public UserController(CacheApi cache, UserService userService) {
+	public UserController(CacheApi cache, UserService userService, Gson gson) {
 		this.cache = cache;
 		this.userService = userService;
+		this.gson = gson;
 	}
 	
 	public Result getUser(String id) {
@@ -34,10 +35,7 @@ public class UserController extends Controller {
 		} else {
 			cache.set(cacheKey, user, 5);
 		}
-		ObjectNode result = Json.newObject();
-		result.put("id", user.getId());
-		result.put("name", user.getName());
-		return ok(result);
+		return ok(gson.toJson(user));
 	}
 	
 	public Result saveUser() {
