@@ -54,6 +54,10 @@ public class User {
 		this.name = name;
 	}
 	
+	public String getCacheKey() {
+		return getCacheKeyFromId(getId());
+	}
+	
 	public JsonNode toJsonNode() {
 		ObjectNode json = Json.newObject();
 		json.put("id", getId());
@@ -117,7 +121,7 @@ public class User {
 	 * @param id The user ID
 	 * @return The cache key
 	 */
-	public static String generateCacheKeyFromId(String id) {
+	public static String getCacheKeyFromId(String id) {
 		return User.class.getCanonicalName() + "#" + id;
 	}
 

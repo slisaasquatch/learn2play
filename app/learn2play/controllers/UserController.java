@@ -27,7 +27,7 @@ public class UserController extends Controller {
 	}
 	
 	public Result getUser(String id) {
-		String cacheKey = User.generateCacheKeyFromId(id);
+		String cacheKey = User.getCacheKeyFromId(id);
 		// Try getting the user from cache. If the cache doesn't exist, ask the UserService for it.
 		User user = cache.getOrElse(cacheKey, () -> {
 			System.out.println("cache for key: " + cacheKey + " not found");
