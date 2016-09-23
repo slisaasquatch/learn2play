@@ -11,6 +11,7 @@ EclipseKeys.preTasks := Seq(compile in Compile)
 
 libraryDependencies ++= Seq(
 	cache,
+	javaWs,
 	"com.google.code.gson" % "gson" % "2.7",
 	"org.jongo" % "jongo" % "1.3.0",
 	"org.mongodb" % "mongo-java-driver" % "2.14.3" // version 3 is not supported by Jongo

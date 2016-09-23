@@ -13,7 +13,7 @@ import play.mvc.Result;
 
 public class UserController extends Controller {
 	
-	private static final int CACHE_TIMEOUT_IN_SECS = 5;
+	private static final int CACHE_TIMEOUT_IN_SECONDS = 5;
 	
 	private CacheApi cache;
 	private UserService userService;
@@ -28,6 +28,7 @@ public class UserController extends Controller {
 	
 	public Result getUser(String id) {
 		String cacheKey = User.generateCacheKeyFromId(id);
+		// Try getting the user from cache. If the cache doesn't exist, ask the UserService for it.
 		User user = cache.getOrElse(cacheKey, () -> {
 			System.out.println("cache for key: " + cacheKey + " not found");
 			return userService.getUser(id);
@@ -35,16 +36,14 @@ public class UserController extends Controller {
 		if (user == null) {
 			return notFound();
 		} else {
-			cache.set(cacheKey, user, CACHE_TIMEOUT_IN_SECS);
+			cache.set(cacheKey, user, CACHE_TIMEOUT_IN_SECONDS);
 		}
 		return ok(gson.toJson(user));
 	}
 	
 	public Result saveUser() {
 		JsonNode json = request().body().asJson();
-		String id = json.get("id").textValue();
-		String name = json.get("name").textValue();
-		User user = new User(id, name);
+		User user = User.fromJsonNode(json);
 		userService.saveUser(user);
 		return ok(gson.toJson(user));
 	}
