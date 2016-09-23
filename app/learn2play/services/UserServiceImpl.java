@@ -9,22 +9,22 @@ import learn2play.db.User;
 
 public class UserServiceImpl implements UserService {
 	
-	private MongoCollection users;
+	private MongoCollection userCollection;
 	
 	@Inject
 	public UserServiceImpl(Jongo jongo) {
-		users = jongo.getCollection("users");
+		userCollection = jongo.getCollection(User.COLLECTION_NAME);
 	}
 
 	@Override
 	public User getUser(String id) {
-		User user = users.findOne("{'_id':'" + id + "'}").as(User.class);
+		User user = userCollection.findOne("{_id:'" + id + "'}").as(User.class);
 		return user;
 	}
 
 	@Override
 	public void saveUser(User user) {
-		users.save(user);
+		userCollection.save(user);
 	}
 
 }

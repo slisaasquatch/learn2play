@@ -13,6 +13,8 @@ import play.mvc.Result;
 
 public class UserController extends Controller {
 	
+	private static final int CACHE_TIMEOUT_IN_SECS = 5;
+	
 	private CacheApi cache;
 	private UserService userService;
 	private Gson gson;
@@ -33,7 +35,7 @@ public class UserController extends Controller {
 		if (user == null) {
 			return notFound();
 		} else {
-			cache.set(cacheKey, user, 5);
+			cache.set(cacheKey, user, CACHE_TIMEOUT_IN_SECS);
 		}
 		return ok(gson.toJson(user));
 	}
@@ -44,7 +46,7 @@ public class UserController extends Controller {
 		String name = json.get("name").textValue();
 		User user = new User(id, name);
 		userService.saveUser(user);
-		return ok(id + " " + name);
+		return ok(gson.toJson(user));
 	}
 
 }

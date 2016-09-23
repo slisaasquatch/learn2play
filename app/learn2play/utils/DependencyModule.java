@@ -6,6 +6,10 @@ import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
+/**
+ * Module for providing dependencies
+ * @author sli
+ */
 public class DependencyModule extends AbstractModule {
 
 	@Override

@@ -11,7 +11,16 @@ import com.google.inject.Provides;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
+/**
+ * A Module for database related stuff
+ * @author sli
+ */
 public class DbModule extends AbstractModule {
+	
+	/**
+	 * The name for the DB for this project
+	 */
+	public static final String DB_NAME = "learn2play";
 
 	@Override
 	protected void configure() {}
@@ -30,7 +39,7 @@ public class DbModule extends AbstractModule {
 	@Provides
 	@Singleton
 	protected DB provideMongoDb(MongoClient client) {
-		return client.getDB("learn2play");
+		return client.getDB(DB_NAME);
 	}
 	
 	@Provides
