@@ -41,8 +41,11 @@ public class UserController extends Controller {
 	public Result saveUser() {
 		JsonNode json = request().body().asJson();
 		User user = User.fromJsonNode(json);
-		userService.saveUser(user);
-		return ok(user.toJsonNode());
+		if (userService.saveUser(user).getN() == 0) {
+			return badRequest();
+		} else {
+			return created(user.toJsonNode());
+		}
 	}
 
 }

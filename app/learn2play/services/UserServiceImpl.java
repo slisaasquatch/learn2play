@@ -5,6 +5,8 @@ import javax.inject.Inject;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 
+import com.mongodb.WriteResult;
+
 import learn2play.db.User;
 
 public class UserServiceImpl implements UserService {
@@ -23,8 +25,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void saveUser(User user) {
-		userCollection.save(user);
+	public WriteResult saveUser(User user) {
+		return userCollection.save(user);
 	}
 
 }

@@ -17,12 +17,18 @@ import org.junit.Before;
 import org.junit.Test;
 
 import learn2play.db.User;
+import play.Application;
+import play.inject.guice.GuiceApplicationBuilder;
 import play.libs.ws.WS;
 import play.libs.ws.WSClient;
 import play.libs.ws.WSResponse;
 import play.test.Helpers;
 
-public class UserHttpTest extends TestBase {
+/**
+ * Test UserController with HTTP requests
+ * @author sli
+ */
+public class UserControllerTest {
 	
 	static final int TEST_PORT = 3333;
 
@@ -30,19 +36,26 @@ public class UserHttpTest extends TestBase {
 	
 	List<User> createdUsers = new LinkedList<User>();
 	
+	Application application = null;
+	
 	@Before
 	public void before() {
-		userCollection = getApplication().injector().instanceOf(Jongo.class).getCollection(User.COLLECTION_NAME);
+		application = new GuiceApplicationBuilder().build();
+		
+		userCollection = application.injector().instanceOf(Jongo.class).getCollection(User.COLLECTION_NAME);
 		
 		Assume.assumeNotNull(userCollection);
-		
-		// Otherwise there would be 2 instances of the app running
-		Helpers.stop(getApplication());
+	}
+	
+	@After
+	public void after() {
+		cleanUpCreatedUsers(createdUsers, userCollection);
+		Helpers.stop(application);
 	}
 	
 	@Test
 	public void testGetUser() {
-		Helpers.running(Helpers.testServer(TEST_PORT), () -> {
+		Helpers.running(Helpers.testServer(TEST_PORT, application), () -> {
 			try (WSClient ws = WS.newClient(TEST_PORT)) {
 				// Create a fake user
 				User u = generateFakeUser(createdUsers);
@@ -71,7 +84,7 @@ public class UserHttpTest extends TestBase {
 	
 	@Test
 	public void testSaveUser() {
-		Helpers.running(Helpers.testServer(TEST_PORT), () -> {
+		Helpers.running(Helpers.testServer(TEST_PORT, application), () -> {
 			try (WSClient ws = WS.newClient(TEST_PORT)) {
 				// Create a fake user
 				User u = generateFakeUser(createdUsers);
@@ -79,7 +92,7 @@ public class UserHttpTest extends TestBase {
 				CompletionStage<WSResponse> completionStage = ws.url("/api/user/").post(u.toJsonNode());
 				WSResponse response = completionStage.toCompletableFuture().get();
 				// Check if the status is ok
-				Assert.assertEquals(Helpers.OK, response.getStatus());
+				Assert.assertEquals(Helpers.CREATED, response.getStatus());
 				// Try looking for it
 				User u2 = userCollection.findOne("{_id:'" + u.getId() + "'}").as(User.class);
 				// Check if they are the same
@@ -90,7 +103,7 @@ public class UserHttpTest extends TestBase {
 				completionStage = ws.url("/api/user/").post(u.toJsonNode());
 				response = completionStage.toCompletableFuture().get();
 				// Check if the status is ok
-				Assert.assertEquals(Helpers.OK, response.getStatus());
+				Assert.assertEquals(Helpers.CREATED, response.getStatus());
 				// Retrieve the user from DB again
 				u2 = userCollection.findOne("{_id:'" + u.getId() + "'}").as(User.class);
 				// Check if they are the same
@@ -100,11 +113,6 @@ public class UserHttpTest extends TestBase {
 				Assert.fail();
 			}
 		});
-	}
-	
-	@After
-	public void after() {
-		cleanUpCreatedUsers(createdUsers, userCollection);
 	}
 	
 }

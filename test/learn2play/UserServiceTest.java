@@ -14,20 +14,37 @@ import org.junit.Test;
 
 import learn2play.db.User;
 import learn2play.services.UserService;
+import play.Application;
+import play.inject.guice.GuiceApplicationBuilder;
+import play.test.Helpers;
 
-public class UserServiceTest extends TestBase {
+/**
+ * Test UserService directly without HTTP requests
+ * @author sli
+ */
+public class UserServiceTest {
 	
 	UserService userService;
 	MongoCollection userCollection;
 	
 	List<User> createdUsers = new LinkedList<User>();
 	
+	Application application = null;
+	
 	@Before
 	public void before() {
-		userService = getApplication().injector().instanceOf(UserService.class);
-		userCollection = getApplication().injector().instanceOf(Jongo.class).getCollection(User.COLLECTION_NAME);
+		application = new GuiceApplicationBuilder().build();
+		
+		userService = application.injector().instanceOf(UserService.class);
+		userCollection = application.injector().instanceOf(Jongo.class).getCollection(User.COLLECTION_NAME);
 		
 		Assume.assumeNotNull(userService, userCollection);
+	}
+	
+	@After
+	public void after() {
+		cleanUpCreatedUsers(createdUsers, userCollection);
+		Helpers.stop(application);
 	}
 	
 	@Test
@@ -64,11 +81,6 @@ public class UserServiceTest extends TestBase {
 		u2 = userCollection.findOne("{_id:'" + u.getId() + "'}").as(User.class);
 		// Check if they are the same
 		Assert.assertEquals(u, u2);
-	}
-	
-	@After
-	public void after() {
-		cleanUpCreatedUsers(createdUsers, userCollection);
 	}
 	
 	static User generateFakeUser(List<User> createdUsers) {
