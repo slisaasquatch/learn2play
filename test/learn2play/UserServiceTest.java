@@ -12,7 +12,7 @@ import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
-import learn2play.db.User;
+import learn2play.models.User;
 import learn2play.services.UserService;
 import play.Application;
 import play.inject.guice.GuiceApplicationBuilder;

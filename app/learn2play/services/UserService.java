@@ -3,7 +3,7 @@ package learn2play.services;
 import com.google.inject.ImplementedBy;
 import com.mongodb.WriteResult;
 
-import learn2play.db.User;
+import learn2play.models.User;
 
 /**
  * A very simple service for getting and saving users

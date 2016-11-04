@@ -1,4 +1,4 @@
-package learn2play.db;
+package learn2play.models;
 
 import org.jongo.marshall.jackson.oid.MongoId;
 

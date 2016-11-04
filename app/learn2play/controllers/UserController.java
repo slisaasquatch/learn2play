@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import learn2play.db.User;
+import learn2play.models.User;
 import learn2play.services.UserService;
 import play.cache.CacheApi;
 import play.mvc.Controller;

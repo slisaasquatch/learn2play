@@ -7,7 +7,7 @@ import org.jongo.MongoCollection;
 
 import com.mongodb.WriteResult;
 
-import learn2play.db.User;
+import learn2play.models.User;
 
 public class UserServiceImpl implements UserService {
 	
