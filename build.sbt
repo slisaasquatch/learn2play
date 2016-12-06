@@ -2,7 +2,7 @@ name := "learn2play"
 
 version := "0.0.1"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.11.8"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
